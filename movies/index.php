@@ -67,7 +67,7 @@
 
         echo ' <a href="../" > <img width="20" src="./../images/up.png"/>Go up </a><br><br>';
         echo '<table id="table1">';
-        echo '<thead><tr><th>Server Contents</th><th>Size</th><th>Genre/Category</th><th>Description</th><th>Uploader</th><th>Added On</th><th></th><th>Options</th></tr></thead>';
+        echo '<thead><tr><th style="max-width:325">Server Contents</th><th>Size</th><th>Genre/Category</th><th style="max-width:150px">Description</th><th>Uploader</th><th>Added On</th><th></th><th>Options</th></tr></thead>';
         echo '<tbody>';
 
         $genres = array();
@@ -97,11 +97,11 @@
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
-                echo " <td><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $genres[$files[$i]] . "</td><td>" . $genres[$files[$i] . "d"] . "</td><td style='text-align:center;'>" . $genres[$files[$i] . "u"] . "</td><td>".date ("d F,Y", filemtime($files[$i]))."</td>";
+                echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $genres[$files[$i]] . "</td><td style='max-width:150px;  font-size: 14;'>" . $genres[$files[$i] . "d"] . "</td><td style='text-align:center;'><a >" . $genres[$files[$i] . "u"] . "</a></td><td>".date ("d F,Y", filemtime($files[$i]))."</td>";
                 if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1) {
-                    echo " <td><input type='button' class='btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Play' /></td><td><input type='button' style='margin-right: 10px;' class='btn-primary' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
+                    echo " <td><input type='button' class='btn btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Play' /></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
                 } else {
-                    echo " <td></td><td><input type='button' class='btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
+                    echo " <td></td><td><input type='button' class= 'btn btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
                 }
             } else if (!strpos($files[$i], '~') > 0) {
                 echo " <td><a href='" . $files[$i] . "' ><img width='20' src='./../images/folder.png'/> " . $files[$i] . "/</a></td><br>";
@@ -153,7 +153,14 @@
                 xmlhttp.open("GET", "delete.php?pass=" + passs + "&fn=" + id, true);
                 xmlhttp.send();
             }
-
+            $("a").hover(
+                function () {
+                  $(this).addClass("animated swing");
+                },
+                function () {
+                  $(this).removeClass("animated swing");
+                }
+              );
             var app = angular.module("myApp", []);
             app.controller("myCtrl", function ($scope) {
                 $scope.content = "movie";
@@ -171,7 +178,7 @@
                         null,
                         null,
                         null,
-                        { "bSortable": false },
+                        null,
                         { "bSortable": false },
                     ]
                 });
@@ -179,6 +186,9 @@
                 $('select').addClass('btn');
                 $('input[type=search]').addClass('animated wobble');
                 $("tr:even").css("background-color", "#EEEEEE");
+                if ($('#table1 tr').length < 11) {
+                    $('.dataTables_paginate').hide();
+                }
             });
             jQuery.fn.dataTableExt.oSort['file-size-asc'] = function (a, b) {
                 var x = a.substring(0, a.length - 2);

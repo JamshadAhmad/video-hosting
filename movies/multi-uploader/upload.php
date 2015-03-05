@@ -27,8 +27,14 @@
             $genre = $_POST["genre"];
             $desc = $_POST["desc"];
             $ip = $_POST["ip"];
-            if ($genre !== "null") {
-                $needToSaveGenre = true;
+            if(count($ip)<=1){
+                $ip="N_A";
+            }
+            if(count($desc)<=1){
+                $desc = "N_A";
+            }
+            if($genre==="null"){
+                $genre = "N_A";
             }
 
             $file_count = count($_FILES["item_file"]['name']);
@@ -53,12 +59,11 @@
 
                             //Save genre here if needed for file type
                             $ext = explode(".", $filen)[1];
-                            if ($needToSaveGenre === true) {
-                                $file = "./../../assets/movie_data.dat";
-                                $current = file_get_contents($file);
-                                $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
-                                file_put_contents($file, $current);
-                            }
+                            $file = "./../../assets/movie_data.dat";
+                            $current = file_get_contents($file);
+                            $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
+                            file_put_contents($file, $current);
+
                         } else {
                             echo "Errors occoured during file upload!";
                         }
