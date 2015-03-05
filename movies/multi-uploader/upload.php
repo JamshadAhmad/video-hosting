@@ -54,15 +54,10 @@
                             //Save genre here if needed for file type
                             $ext = explode(".", $filen)[1];
                             if ($needToSaveGenre === true) {
-                                if ($ext == "mpg" || $ext == "avi" || $ext == "mkv" || $ext == "mp4" || $ext == "zip" || $ext == "3gp") {
-                                    $file = "./../../assets/movie_data.dat";
-
-                                    $current = file_get_contents($file);
-
-                                    $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
-
-                                    file_put_contents($file, $current);
-                                }
+                                $file = "./../../assets/movie_data.dat";
+                                $current = file_get_contents($file);
+                                $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
+                                file_put_contents($file, $current);
                             }
                         } else {
                             echo "Errors occoured during file upload!";
@@ -74,5 +69,3 @@
         </h4>
     </body>
 </html>
-
-

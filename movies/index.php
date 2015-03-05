@@ -5,6 +5,7 @@
         <script src="./../assets/jquery-1.9.1.js"></script>
         <link href="./../assets/jquery.dataTables.css" rel="stylesheet" type="text/css" />
         <script src="./../assets/jquery.dataTables.js"></script>
+        <script src="./../assets/file-size.js"></script>
         <script src="./../assets/bootstrap.min.js"></script><!--No need-->
         <link rel="stylesheet" href = "./../assets/bootstrap.min.css">
         <link rel="stylesheet" href = "./../assets/animate.min.css">
@@ -47,6 +48,14 @@
         <?php
         $dir = '.';
         $files = scandir($dir);
+        function filetime_callback($a, $b)
+        {
+          if (filemtime($a) === filemtime($b)) return 0;
+          return filemtime($a) > filemtime($b) ? -1 : 1; 
+        }
+
+        // Then sort with usort()
+        usort($files, "filetime_callback");
 
 
         echo ' <a href="../" > <img width="20" src="./../images/up.png"/>Go up </a><br><br>';
@@ -145,12 +154,73 @@
                 $scope.playable = "true";
             });
             $(document).ready(function () {
-                var table = $('#table1').DataTable();
+                var table = $('#table1').DataTable({
+                    "order": [],
+                    "sDom": 'T<"clear">lfrtip',
+                    "aoColumns": [
+                        null,
+                        {"sType": "file-size"},
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    ]
+                });
                 $('input').addClass('btn');
                 $('select').addClass('btn');
                 $('input[type=search]').addClass('animated wobble');
                 $("tr:even").css("background-color", "#EEEEEE");
             });
+            jQuery.fn.dataTableExt.oSort['file-size-asc'] = function (a, b) {
+                var x = a.substring(0, a.length - 2);
+                var y = b.substring(0, b.length - 2);
+
+                var x_unit = (a.substring(a.length - 2, a.length) == "MB" ? 1000 : (a.substring(a.length - 2, a.length) == "GB" ? 1000000 : 1));
+                var y_unit = (b.substring(b.length - 2, b.length) == "MB" ? 1000 : (b.substring(b.length - 2, b.length) == "GB" ? 1000000 : 1));
+
+                x = parseInt(x * x_unit);
+                y = parseInt(y * y_unit);
+
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            };
+
+            jQuery.fn.dataTableExt.oSort['file-size-desc'] = function (a, b) {
+                var x = a.substring(0, a.length - 2);
+                var y = b.substring(0, b.length - 2);
+
+                var x_unit = (a.substring(a.length - 2, a.length) == "MB" ? 1000 : (a.substring(a.length - 2, a.length) == "GB" ? 1000000 : 1));
+                var y_unit = (b.substring(b.length - 2, b.length) == "MB" ? 1000 : (b.substring(b.length - 2, b.length) == "GB" ? 1000000 : 1));
+
+                x = parseInt(x * x_unit);
+                y = parseInt(y * y_unit);
+
+                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+            };
+            jQuery.fn.dataTableExt.aTypes.push(
+                    function (sData)
+                    {
+                        var sValidChars = "0123456789";
+                        var Char;
+
+                        /* Check the numeric part */
+                        for (i = 0; i < (sData.length - 3); i++)
+                        {
+                            Char = sData.charAt(i);
+                            if (sValidChars.indexOf(Char) == -1)
+                            {
+                                return null;
+                            }
+                        }
+
+                        /* Check for size unit KB, MB or GB */
+                        if (sData.endsWith("KB") || sData.endsWith("MB") || sData.endsWith("GB"))
+                        {
+                            return 'size';
+                        }
+                        return null;
+                    }
+            );
         </script>
     </body>
 </html>
@@ -160,13 +230,13 @@
 function formatSizeUnits($bytes)
 {
     if ($bytes >= 1073741824) {
-        $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        $bytes = number_format($bytes / 1073741824, 2) . 'GB';
     } elseif ($bytes >= 1048576) {
-        $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        $bytes = number_format($bytes / 1048576, 2) . 'MB';
     } elseif ($bytes >= 1024) {
-        $bytes = number_format($bytes / 1024, 2) . ' KB';
+        $bytes = number_format($bytes / 1024, 2) . 'KB';
     } elseif ($bytes > 1) {
-        $bytes = $bytes . ' bytes';
+        $bytes = $bytes . 'B';
     } elseif ($bytes == 1) {
         $bytes = $bytes . ' byte';
     } else {
