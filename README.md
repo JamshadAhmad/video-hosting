@@ -1,5 +1,5 @@
 # video-hosting
-A video hosting site, best for LAN network. Doesn't use any kind of Database and runs perfectly even without internet connection . It has download options for all kind of files and HTML5 supported streaming for video files.
+A video hosting site, custom for Coeus LAN network. Doesn't use any kind of Database and runs perfectly even without internet connection . It has download options for all kind of files and HTML5 supported streaming for video files.
 
 **Runs on PHP 5.4+**
 
@@ -16,7 +16,9 @@ Steps to Deploy:
 
 3) Set your movies directory by placing the path Line#47 of `video-hosting/movies/multi-uploader/upload.php`
 
-`$path = "/var/www/video-hosting/movies/" . $filen;`
+`$path = "/var/www/video-hosting/movies/pending" . $filen;`
+
+`$path = "/var/www/video-hosting/movies/" . $filen;` in 'approve.php'
 
 to
 
@@ -34,7 +36,7 @@ by default it would be 40M, make it like 9999M for large files.
 
 6) Restart your apache server
 
-7) Change delete password by placing it in `/assets/pass.dat` file, by default it is **adminhost**
+7) Change delete password by placing its md5 eqvalent in `/assets/pass.dat` file
 
 8) Enjoy the Awesomeness by going `[yourIP]/video-hosting/` . 
 
