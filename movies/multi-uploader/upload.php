@@ -26,6 +26,7 @@
             $needToSaveGenre = false;
             $genre = $_POST["genre"];
             $desc = $_POST["desc"];
+            $ip = $_POST["ip"];
             if ($genre !== "null") {
                 $needToSaveGenre = true;
             }
@@ -44,26 +45,25 @@
                         $filen = str_replace($notAllowed, "_", $filen);
                         $filen = substr_replace($filen, ".", strrpos($filen, "_"), strlen("_"));
 
-                        $path = "/var/www/video-hosting/movies/" . $filen;
+                        $path = "./../pending/" . $filen;
 
                         if (move_uploaded_file($_FILES["item_file"]['tmp_name']["$j"], $path)) {
 
                             echo "File # " . ($j + 1) . " ($filen) uploaded successfully!<br>";
-                            
+
                             //Save genre here if needed for file type
-                            $ext = explode(".",$filen)[1];
-                            if($needToSaveGenre===true){
-                                if($ext=="mpg" || $ext=="avi" || $ext=="mkv" || $ext=="mp4" || $ext=="zip" || $ext=="3gp"){
+                            $ext = explode(".", $filen)[1];
+                            if ($needToSaveGenre === true) {
+                                if ($ext == "mpg" || $ext == "avi" || $ext == "mkv" || $ext == "mp4" || $ext == "zip" || $ext == "3gp") {
                                     $file = "./../../assets/movie_data.dat";
 
                                     $current = file_get_contents($file);
 
-                                    $current .= $filen." ".$genre." ".$desc."\n";
+                                    $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
 
                                     file_put_contents($file, $current);
                                 }
                             }
-                            
                         } else {
                             echo "Errors occoured during file upload!";
                         }

@@ -1,21 +1,19 @@
 <html>
     <head> 
-        <title>Download Movies</title>
+        <title>Pending movies</title>
         <script src="./../assets/angular.min.js"></script>
         <script src="./../assets/jquery-1.9.1.js"></script>
         <link href="./../assets/jquery.dataTables.css" rel="stylesheet" type="text/css" />
         <script src="./../assets/jquery.dataTables.js"></script>
         <script src="./../assets/bootstrap.min.js"></script><!--No need-->
         <link rel="stylesheet" href = "./../assets/bootstrap.min.css">
-        <link rel="stylesheet" href = "./../assets/animate.min.css">
         <style>
-            input[type="search"],select{
-                background: #EEEEEE;
-                border: lightgrey solid 1px;
+            input[type="search"] {
+                background: lightgray;
             }
         </style>
     </head>
-    <body background='./../images/b.png'>  
+    <body>  
         <div class="navbar navbar-inverse" style="height: 10px;">
             <div class="navbar-header">
 
@@ -25,33 +23,27 @@
                     <span class="icon-bar"></span>
 
                 </button>
-                <a class="navbar-brand animated zoomIn" href="#">List of Movies</a>
+
+                <a class="navbar-brand" href="#">List of Pending Movies</a>
 
 
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php">Upload Movie</a></li>
-                    <?php
-                    $pfiles = scandir("./pending/");
-                    if (count($pfiles) > 2) {
-                        echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
-                    }
-                    ?>
+                    <li><a class="btn-success" style="color: white;" href="./index.php"> Back to Movies</a></li>
                 </ul>
-                <p style="float:right;margin-top: 15px" class="text-muted">by Jamshad Ahmad for Coeus Solutions.</p>
+
             </div>
         </div>
-        <h1 style="text-align:center" class="animated zoomIn">List of files</h1>
+        <h1>List of pending files</h1>
         <span id="broserError"></span>
         <?php
-        $dir = '.';
+        $dir = './pending/';
         $files = scandir($dir);
-
 
         echo ' <a href="../" > <img width="20" src="./../images/up.png"/>Go up </a><br><br>';
         echo '<table id="table1">';
-        echo '<thead><tr><th>Server Contents</th><th>Size</th><th>Genre/Category</th><th>Description</th><th>Uploader</th><th></th><th>Options</th></tr></thead>';
+        echo '<thead><tr><th>Server Contents</th><th>Genre/Category</th><th>Description</th><th>Uploader</th><th></th><th>Options</th></tr></thead>';
         echo '<tbody>';
 
         $genres = array();
@@ -76,19 +68,15 @@
         for ($i = 0; $i < count($files); $i++) {
             if (strlen($files[$i]) < 3 && strpos($files[$i], '.') === 0) {
                 continue;
-            } else if ($files[$i] === "index.php" || $files[$i] === "delete.php" || $files[$i] === "pending.php" || $files[$i] === "approve.php" || $files[$i] === "pending" || $files[$i] === "multi-uploader") {
+            } else if ($files[$i] === "index.php" || $files[$i] === "delete.php" || $files[$i] === "pending.php" || $files[$i] === "multi-uploader") {
                 continue;
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
-                echo " <td><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $genres[$files[$i]] . "</td><td>" . $genres[$files[$i] . "d"] . "</td><td style='text-align:center;'>" . $genres[$files[$i] . "u"] . "</td>";
-                if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1) {
-                    echo " <td><input type='button' class='btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Play' /></td><td><input type='button' style='margin-right: 10px;' class='btn-primary' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
-                } else {
-                    echo " <td></td><td><input type='button' class='btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
-                }
+                echo " <td><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='#'><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . $genres[$files[$i]] . "</td><td>" . $genres[$files[$i] . "d"] . "</td><td>" . $genres[$files[$i] . "u"] . "</td>";
+                echo " <td></td><td><input type='button' class='btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . $files[$i] . "' value='Approve' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
             } else if (!strpos($files[$i], '~') > 0) {
-                echo " <td><a href='" . $files[$i] . "' ><img width='20' src='./../images/folder.png'/> " . $files[$i] . "/</a></td><br>";
+                echo "  <td> <a href='" . $files[$i] . "' > &nbsp;<img width='20' src='./../images/folder.png'/> " . $files[$i] . "/</a></td><br>";
             }
         }
         echo '</tbody>';
@@ -116,8 +104,23 @@
                 $("#div" + id).html("");
             }
             function download(id) {
-                $("#" + id + "a").focus();
-                document.getElementById(id + "a").click();
+                //move to Download/Approved folder here
+                var passs = prompt("Enter password to continue");
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        if (xmlhttp.responseText == "1")
+                        {
+                            location.reload();
+                        }
+                        else
+                        {
+                            alert(xmlhttp.responseText);
+                        }
+                    }
+                }
+                xmlhttp.open("GET", "approve.php?pass=" + passs + "&fn=" + id, true);
+                xmlhttp.send();
             }
             function deletev(id) {
                 var passs = prompt("Enter password to continue");
@@ -134,7 +137,7 @@
                         }
                     }
                 }
-                xmlhttp.open("GET", "delete.php?pass=" + passs + "&fn=" + id, true);
+                xmlhttp.open("GET", "delete.php?pass=" + passs + "&fn=" + id + "&pending=yes", true);
                 xmlhttp.send();
             }
 
@@ -145,34 +148,10 @@
                 $scope.playable = "true";
             });
             $(document).ready(function () {
-                var table = $('#table1').DataTable();
+                $('#table1').DataTable();
                 $('input').addClass('btn');
                 $('select').addClass('btn');
-                $('input[type=search]').addClass('animated wobble');
-                $("tr:even").css("background-color", "#EEEEEE");
             });
         </script>
     </body>
 </html>
-<?php
-
-//helper method
-function formatSizeUnits($bytes)
-{
-    if ($bytes >= 1073741824) {
-        $bytes = number_format($bytes / 1073741824, 2) . ' GB';
-    } elseif ($bytes >= 1048576) {
-        $bytes = number_format($bytes / 1048576, 2) . ' MB';
-    } elseif ($bytes >= 1024) {
-        $bytes = number_format($bytes / 1024, 2) . ' KB';
-    } elseif ($bytes > 1) {
-        $bytes = $bytes . ' bytes';
-    } elseif ($bytes == 1) {
-        $bytes = $bytes . ' byte';
-    } else {
-        $bytes = '0 bytes';
-    }
-
-    return $bytes;
-}
-?>

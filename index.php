@@ -5,6 +5,10 @@
         <link rel="stylesheet" href = "./assets/bootstrap.min.css">
     </head>
     <body>
+        <script>
+            //Redirecting to actual file
+            window.location.href = './movies/index.php';
+        </script>
         <div class="navbar navbar-inverse" style="height: 10px;">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -58,6 +62,7 @@
             function stopvid(id) {
                 $("#div" + id).html("");
             }
+
             var app = angular.module("myApp", []);
             app.controller("myCtrl", function ($scope) {
                 $scope.firstName = "John";

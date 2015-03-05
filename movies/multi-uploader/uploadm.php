@@ -6,8 +6,6 @@ $up_id = uniqid();
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Movie Uploader</title>
-        <meta name="description" content="Free PHP multi file uploader script with progress bar which is easy to configure and use." />
-
         <!--Progress Bar and iframe Styling-->
         <link href="style-progress.css" rel="stylesheet" type="text/css" />
 
@@ -96,7 +94,10 @@ $up_id = uniqid();
                 f.pgaction.value = 'upload';
                 return true;
             }
-            
+            $(document).ready(function () {
+                var ip = $("#ip").val();
+                $("#ipdiv").append(ip);
+            });
         </script>
 
 
@@ -112,8 +113,8 @@ $up_id = uniqid();
                 </button>
                 <a class="navbar-brand" href="./../index.php"><img width="28px" src="../../images/back-icon.jpg" style="background: dimgray"/> Back to Movies</a>
             </div>
-            <div class="navbar-collapse collapse">
-
+            <div class="navbar-collapse collapse" style="float: right;">
+                <div style="color: #AAAAAA;padding-top: 15px;" id="ipdiv">Your IP Will be Recorded : </div>
             </div>
         </div>
         <div class="container">
@@ -151,6 +152,17 @@ $up_id = uniqid();
                 </textarea>
                 <br><br>
                 <input type="submit" class="btn btn-success" style="width:175px" value="Upload!">
+                <?php
+                $ip = 'N/A';
+                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                    $ip = $_SERVER['HTTP_CLIENT_IP'];
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                } else {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                }
+                echo '<input type="hidden" id="ip" name="ip" value="' . $ip . '"  hidden="hidden"/>';
+                ?>
             </form>
 
             <!--Include the progress bar frame-->
@@ -158,6 +170,7 @@ $up_id = uniqid();
             <!---->
         </div>
     </body>
+
 </html> 
 
 
