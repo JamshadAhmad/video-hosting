@@ -46,24 +46,7 @@
         echo '<thead><tr><th>Server Contents</th><th>Genre/Category</th><th>Description</th><th>Uploader</th><th></th><th>Options</th></tr></thead>';
         echo '<tbody>';
 
-        $genres = array();
-        $handle = fopen("./../assets/movie_data.dat", "r");
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                $genres[explode(' ', $line)[0]] = explode(' ', $line)[2];
-                $uploader = explode(' ', $line)[1];
-                $temp = explode(' ', $line);
-                $description = "";
-                for ($j = 3; $j < count($temp); $j++) {
-                    $description = $description . " " . $temp[$j];
-                }
-                $genres[explode(' ', $line)[0] . "d"] = $description;
-                $genres[explode(' ', $line)[0] . "u"] = $uploader;
-            }
-            fclose($handle);
-        } else {
-            echo "Error Reading genre file";
-        }
+        $mdata = json_decode(file_get_contents("./../assets/movie_data.json"));
 
         for ($i = 0; $i < count($files); $i++) {
             if (strlen($files[$i]) < 3 && strpos($files[$i], '.') === 0) {
@@ -73,7 +56,7 @@
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
-                echo " <td><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='#'><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . $genres[$files[$i]] . "</td><td>" . $genres[$files[$i] . "d"] . "</td><td>" . $genres[$files[$i] . "u"] . "</td>";
+                echo " <td><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='#'><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . $mdata->$files[$i]->genre . "</td><td>" . $mdata->$files[$i]->desc . "</td><td>" . $mdata->$files[$i]->uploader . "</td>";
                 echo " <td></td><td><input type='button' class='btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . $files[$i] . "' value='Approve' /><input type='button' class='btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
             } else if (!strpos($files[$i], '~') > 0) {
                 echo "  <td> <a href='" . $files[$i] . "' > &nbsp;<img width='20' src='./../images/folder.png'/> " . $files[$i] . "/</a></td><br>";

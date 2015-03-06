@@ -23,14 +23,10 @@
             if (!isset($_FILES["item_file"]))
                 die("Error: no files uploaded!");
 
-            $needToSaveGenre = false;
             $genre = $_POST["genre"];
             $desc = $_POST["desc"];
             $ip = $_POST["ip"];
-            if(count($ip)<=1){
-                $ip="N_A";
-            }
-            if(count($desc)<=1){
+            if(strlen($desc)<=1){
                 $desc = "N_A";
             }
             if($genre==="null"){
@@ -58,11 +54,11 @@
                             echo "File # " . ($j + 1) . " ($filen) uploaded successfully!<br>";
 
                             //Save genre here if needed for file type
-                            $ext = explode(".", $filen)[1];
-                            $file = "./../../assets/movie_data.dat";
-                            $current = file_get_contents($file);
-                            $current .= $filen . " " . $ip . " " . $genre . " " . $desc . "\n";
-                            file_put_contents($file, $current);
+                            $mdata = json_decode(file_get_contents("./../../assets/movie_data.json"));
+                            $mdata->$filen->uploader = $ip;
+                            $mdata->$filen->genre = $genre;
+                            $mdata->$filen->desc = $desc;
+                            file_put_contents("./../../assets/movie_data.json", json_encode($mdata));
 
                         } else {
                             echo "Errors occoured during file upload!";

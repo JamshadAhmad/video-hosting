@@ -18,24 +18,13 @@ try {
             echo "Cannot find/delete file : " . $fn;
         }
         //Also delete its description
-        //./../assets/movie_data.dat
+        //./../assets/movie_data.json
         if ($fileDeleted) {
-            $arr = file("./../assets/movie_data.dat");
-            // remove second line
-            $targetline = 0;
-            foreach ($arr as $line) {
-                if (explode(" ", $line)[0] === $fn) {
-                    break;
-                }
-                $targetline = $targetline + 1;
-            }
-            if ($targetline < count($arr)) { //If found
-                unset($arr[$targetline]);
-            }
-
-            $arr = array_values($arr);
-
-            file_put_contents("./../assets/movie_data.dat", implode($arr));
+            
+            //For json
+            $mdata = json_decode(file_get_contents("./../assets/movie_data.json"));
+            unset($mdata->$fn);
+            file_put_contents("./../assets/movie_data.json", json_encode($mdata));
 
 
             echo "1";

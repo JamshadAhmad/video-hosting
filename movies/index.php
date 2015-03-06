@@ -39,13 +39,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php">Upload Movie</a></li>
-                    <?php
-                    $pfiles = scandir("./pending/");
-                    if (count($pfiles) > 2) {
-                        echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
-                    }
-                    ?>
+                    <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php"><img src="./../images/upload.png" style="height: 18;"> Upload Movie</a></li>
+                        <?php
+                        $pfiles = scandir("./pending/");
+                        if (count($pfiles) > 2) {
+                            echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
+                        }
+                        ?>
                 </ul>
                 <p style="float:right;margin-top: 15px" class="text-muted">by Jamshad Ahmad for Coeus Solutions.</p>
             </div>
@@ -55,10 +55,12 @@
         <?php
         $dir = '.';
         $files = scandir($dir);
+
         function filetime_callback($a, $b)
         {
-          if (filemtime($a) === filemtime($b)) return 0;
-          return filemtime($a) > filemtime($b) ? -1 : 1; 
+            if (filemtime($a) === filemtime($b))
+                return 0;
+            return filemtime($a) > filemtime($b) ? -1 : 1;
         }
 
         // Then sort with usort()
@@ -70,24 +72,7 @@
         echo '<thead><tr><th style="max-width:325">Server Contents</th><th>Size</th><th>Genre/Category</th><th style="max-width:150px">Description</th><th>Uploader</th><th>Added On</th><th></th><th>Options</th></tr></thead>';
         echo '<tbody>';
 
-        $genres = array();
-        $handle = fopen("./../assets/movie_data.dat", "r");
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                $genres[explode(' ', $line)[0]] = explode(' ', $line)[2];
-                $uploader = explode(' ', $line)[1];
-                $temp = explode(' ', $line);
-                $description = "";
-                for ($j = 3; $j < count($temp); $j++) {
-                    $description = $description . " " . $temp[$j];
-                }
-                $genres[explode(' ', $line)[0] . "d"] = $description;
-                $genres[explode(' ', $line)[0] . "u"] = $uploader;
-            }
-            fclose($handle);
-        } else {
-            echo "Error Reading genre file";
-        }
+        $mdata = json_decode(file_get_contents("./../assets/movie_data.json"));
 
         for ($i = 0; $i < count($files); $i++) {
             if (strlen($files[$i]) < 3 && strpos($files[$i], '.') === 0) {
@@ -97,9 +82,10 @@
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
-                echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $genres[$files[$i]] . "</td><td style='max-width:150px;  font-size: 14;'>" . $genres[$files[$i] . "d"] . "</td><td style='text-align:center;'><a >" . $genres[$files[$i] . "u"] . "</a></td><td>".date ("d F,Y", filemtime($files[$i]))."</td>";
+                echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
+
                 if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1) {
-                    echo " <td><input type='button' class='btn btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Play' /></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
+                    echo " <td><button class='btn btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' ><img src='./../images/play.jpg' style='height: 18;'>  Play</button></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
                 } else {
                     echo " <td></td><td><input type='button' class= 'btn btn-primary' style='margin-right: 10px;' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><br>";
                 }
@@ -110,8 +96,6 @@
         echo '</tbody>';
         echo '</table>';
         ?>
-
-
 
         <script type="text/javascript">
             var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -154,13 +138,13 @@
                 xmlhttp.send();
             }
             $("a").hover(
-                function () {
-                  $(this).addClass("animated swing");
-                },
-                function () {
-                  $(this).removeClass("animated swing");
-                }
-              );
+                    function () {
+                        $(this).addClass("animated swing");
+                    },
+                    function () {
+                        $(this).removeClass("animated swing");
+                    }
+            );
             var app = angular.module("myApp", []);
             app.controller("myCtrl", function ($scope) {
                 $scope.content = "movie";
@@ -179,7 +163,7 @@
                         null,
                         null,
                         null,
-                        { "bSortable": false },
+                        {"bSortable": false},
                     ]
                 });
                 $('input').addClass('btn');
