@@ -9,6 +9,8 @@
         <script src="./../assets/bootstrap.min.js"></script><!--No need-->
         <link rel="stylesheet" href = "./../assets/bootstrap.min.css">
         <link rel="stylesheet" href = "./../assets/animate.min.css">
+        <script src="./../assets/sweet-alert.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./../assets/sweet-alert.css">
         <style>
             input[type="search"],select{
                 background: #EEEEEE;
@@ -18,12 +20,31 @@
                 height: 50px;
             }
             th{
+                text-shadow: 1px 1px #AAA;
                 height: 35px;
                 color: black;
             }
+            .pw_prompt {
+                position:fixed;
+                left: 50%;
+                top:15%;
+                margin-left:-100px;
+                padding:15px;
+                width:parent;
+                border:1px solid black;
+            }
+            .pw_prompt label {
+                display:block; 
+                margin-bottom:5px;
+            }
+            .pw_prompt input {
+                margin-bottom:10px;
+            }
         </style>
     </head>
+
     <body background='./../images/b.png'>  
+
         <div class="navbar navbar-inverse" style="height: 10px;">
             <div class="navbar-header">
 
@@ -33,19 +54,20 @@
                     <span class="icon-bar"></span>
 
                 </button>
-                <a class="navbar-brand animated zoomIn" href="#">List of Movies</a>
+                <img src="./../images/movie.png" style="float:left;height:50px">
+                <a class="navbar-brand animated zoomIn active" href="#">List of Movies</a>
 
 
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php"><img src="./../images/upload.png" style="height: 18;"> Upload Movie</a></li>
-                        <?php
-                        $pfiles = scandir("./pending/");
-                        if (count($pfiles) > 2) {
-                            echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
-                        }
-                        ?>
+                    <?php
+                    $pfiles = scandir("./pending/");
+                    if (count($pfiles) > 2) {
+                        echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
+                    }
+                    ?>
                 </ul>
                 <p style="float:right;margin-top: 15px" class="text-muted">by Jamshad Ahmad for Coeus Solutions.</p>
             </div>
@@ -97,133 +119,7 @@
         echo '</table>';
         ?>
 
-        <script type="text/javascript">
-            var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-            var isChrome = !!window.chrome && !isOpera;
-            var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-            var validBrow = false;
-            if (isChrome || isSafari) {
-                validBrow = true;
-            }
-            if (!validBrow) {
-                $('#broserError').html("Videos might not play in this browser, please use google chrome <br><br>");
-            }
-            function playvid(id) {
-                $("div[id^='div']").html("");
-                $("#div" + id).html("<video style='width:480px;' controls><source src='" + id + "'>Your browser does not support HTML5 video.</video><br><input type='button' class='btn-danger' id='" + id + "' value='Close Player' onclick='stopvid(this.id)'/><br>");
-            }
-            function stopvid(id) {
-                $("#div" + id).html("");
-            }
-            function download(id) {
-                $("#" + id + "a").focus();
-                document.getElementById(id + "a").click();
-            }
-            function deletev(id) {
-                var passs = prompt("Enter password to continue");
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        if (xmlhttp.responseText == "1")
-                        {
-                            location.reload();
-                        }
-                        else
-                        {
-                            alert(xmlhttp.responseText);
-                        }
-                    }
-                }
-                xmlhttp.open("GET", "delete.php?pass=" + passs + "&fn=" + id, true);
-                xmlhttp.send();
-            }
-            $("a").hover(
-                    function () {
-                        $(this).addClass("animated swing");
-                    },
-                    function () {
-                        $(this).removeClass("animated swing");
-                    }
-            );
-            var app = angular.module("myApp", []);
-            app.controller("myCtrl", function ($scope) {
-                $scope.content = "movie";
-                $scope.genre = "n/a";
-                $scope.playable = "true";
-            });
-            $(document).ready(function () {
-                var table = $('#table1').DataTable({
-                    "order": [],
-                    "sDom": 'T<"clear">lfrtip',
-                    "aoColumns": [
-                        null,
-                        {"sType": "file-size"},
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        {"bSortable": false},
-                    ]
-                });
-                $('input').addClass('btn');
-                $('select').addClass('btn');
-                $('input[type=search]').addClass('animated wobble');
-                $("tr:even").css("background-color", "#EEEEEE");
-                if ($('#table1 tr').length < 11) {
-                    $('.dataTables_paginate').hide();
-                }
-            });
-            jQuery.fn.dataTableExt.oSort['file-size-asc'] = function (a, b) {
-                var x = a.substring(0, a.length - 2);
-                var y = b.substring(0, b.length - 2);
-
-                var x_unit = (a.substring(a.length - 2, a.length) == "MB" ? 1000 : (a.substring(a.length - 2, a.length) == "GB" ? 1000000 : 1));
-                var y_unit = (b.substring(b.length - 2, b.length) == "MB" ? 1000 : (b.substring(b.length - 2, b.length) == "GB" ? 1000000 : 1));
-
-                x = parseInt(x * x_unit);
-                y = parseInt(y * y_unit);
-
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            };
-
-            jQuery.fn.dataTableExt.oSort['file-size-desc'] = function (a, b) {
-                var x = a.substring(0, a.length - 2);
-                var y = b.substring(0, b.length - 2);
-
-                var x_unit = (a.substring(a.length - 2, a.length) == "MB" ? 1000 : (a.substring(a.length - 2, a.length) == "GB" ? 1000000 : 1));
-                var y_unit = (b.substring(b.length - 2, b.length) == "MB" ? 1000 : (b.substring(b.length - 2, b.length) == "GB" ? 1000000 : 1));
-
-                x = parseInt(x * x_unit);
-                y = parseInt(y * y_unit);
-
-                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-            };
-            jQuery.fn.dataTableExt.aTypes.push(
-                    function (sData)
-                    {
-                        var sValidChars = "0123456789";
-                        var Char;
-
-                        /* Check the numeric part */
-                        for (i = 0; i < (sData.length - 3); i++)
-                        {
-                            Char = sData.charAt(i);
-                            if (sValidChars.indexOf(Char) == -1)
-                            {
-                                return null;
-                            }
-                        }
-
-                        /* Check for size unit KB, MB or GB */
-                        if (sData.endsWith("KB") || sData.endsWith("MB") || sData.endsWith("GB"))
-                        {
-                            return 'size';
-                        }
-                        return null;
-                    }
-            );
-        </script>
+        <script type="text/javascript" src="./../assets/ml.js"></script>
     </body>
 </html>
 <?php

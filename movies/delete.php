@@ -20,10 +20,14 @@ try {
         //Also delete its description
         //./../assets/movie_data.json
         if ($fileDeleted) {
-            
+
             //For json
             $mdata = json_decode(file_get_contents("./../assets/movie_data.json"));
-            unset($mdata->$fn);
+                unset($mdata->$fn);
+
+                $mdata->$fn = null;
+
+            
             file_put_contents("./../assets/movie_data.json", json_encode($mdata));
 
 
