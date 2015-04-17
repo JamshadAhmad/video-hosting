@@ -64,7 +64,7 @@
                     <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php"><img src="./../images/upload.png" style="height: 18;"> Upload Movie</a></li>
                     <?php
                     $pfiles = scandir("./pending/");
-                    if (count($pfiles) > 2) {
+                    if (count($pfiles) > 3) {
                         echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
                     }
                     ?>
@@ -99,14 +99,14 @@
         for ($i = 0; $i < count($files); $i++) {
             if (strlen($files[$i]) < 3 && strpos($files[$i], '.') === 0) {
                 continue;
-            } else if ($files[$i] === "index.php" || $files[$i] === "delete.php" || $files[$i] === "pending.php" || $files[$i] === "approve.php" || $files[$i] === "pending" || $files[$i] === "multi-uploader") {
+            } else if ($files[$i] === "index.php" || $files[$i] === "delete.php" || $files[$i] === "pending.php" || $files[$i] === "approve.php" || $files[$i] === "pending" || $files[$i] === "multi-uploader" || $files[$i] === ".DS_Store") {
                 continue;
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
                 echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
 
-                if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1) {
+                if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1 ||  strpos($files[$i], '.mpg') > 1) {
                     echo " <td><button class='btn btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' ><img src='./../images/play.jpg' style='height: 18;'>  Play</button></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
                 }else if(strpos($files[$i], '.mp3') > 1) {
                     echo " <td><button class='btn btn-success' onclick='playaud(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' ><img src='./../images/play.jpg' style='height: 18;'>  Play</button></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";

@@ -4,9 +4,8 @@ try {
     $pass = $_GET['pass'];
     $fn = $_GET['fn'];
 
-    $passFromFile = 'null';
     $passFromFile = file_get_contents("./../assets/pass.dat") or die('Unable to read file');
-    $passFromFile = substr($passFromFile, 0, strlen($passFromFile) - 1); //remove EOF
+    $passFromFile = substr($passFromFile, 0, strlen($passFromFile)); //remove EOF
 
     if (md5($pass) === $passFromFile) {
 
