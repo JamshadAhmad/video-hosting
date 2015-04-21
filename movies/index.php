@@ -19,6 +19,10 @@
             tr:not(:first-child){
                 height: 50px;
             }
+	    td{
+                word-wrap: break-word;
+  		word-break: break-all;
+            }
             th{
                 text-shadow: 1px 1px #AAA;
                 height: 35px;
