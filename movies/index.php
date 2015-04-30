@@ -68,7 +68,7 @@
                     <li><a class="btn-success" style="color: white;" href="./multi-uploader/uploadm.php"><img src="./../images/upload.png" style="height: 18;"> Upload Movie</a></li>
                     <?php
                     $pfiles = scandir("./pending/");
-                    if (count($pfiles) > 3) {
+                    if (count($pfiles) > 2) {
                         echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
                     }
                     ?>
