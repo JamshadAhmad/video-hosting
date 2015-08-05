@@ -69,7 +69,7 @@
                     <?php
                     $pfiles = scandir("./pending/");
                     if (count($pfiles) > 3) {
-                        echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 2) . ')</a></li>';
+                        echo '  <li>  <a class="btn-primary" style="color: white;" href="./pending.php">Approve Pending Movies (' . (count($pfiles) - 3) . ')</a></li>';
                     }
                     ?>
                 </ul>
