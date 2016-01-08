@@ -108,11 +108,13 @@
             }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
-                if(strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1 ||  strpos($files[$i], '.mpg') > 1){
+                if((strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1 ||  strpos($files[$i], '.mpg') > 1) && (isset($mdata->$files[$i]))){
                 	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/movie.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
-                }else{
+                }else if(isset($mdata->$files[$i])){
                 	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
-                }
+                }else{
+			echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . "N/A" . "</td><td style='max-width:150px;  font-size: 14;'>" . "N/A" . "</td><td style='text-align:center;'><a >" . "System" . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
+		}	
                 if (strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1 ||  strpos($files[$i], '.mpg') > 1) {
                     echo " <td><button class='btn btn-success' onclick='playvid(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' ><img src='./../images/play.jpg' style='height: 18;'>  Play</button></td><td><input type='button' style='margin-right: 10px;background: deepskyblue;color:white;' class='btn' onclick='download(this.id)' id='" . substr($files[$i], 0, count($files[$i]) - 5) . "' value='Download' /><input type='button' class='btn btn-danger' onclick='deletev(this.id)' id='" . $files[$i] . "' value='Delete' /></td></tr><div style='text-align:center;margin-left: 10px;' id='div" . substr($files[$i], 0, count($files[$i]) - 5) . "'> </div>";
                 }else if(strpos($files[$i], '.mp3') > 1) {
