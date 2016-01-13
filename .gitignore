@@ -8,3 +8,8 @@
 *.srt
 *.mp3
 *.*~
+*.pdf
+pass.dat
+movie_data.json
+assets/movie_data.json
+assets/pass.dat
