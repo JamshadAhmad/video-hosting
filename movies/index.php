@@ -111,6 +111,7 @@
                 $newFileName = str_replace($notAllowed, "_", $newFileName);
                 $newFileName = substr_replace($newFileName, ".", strrpos($newFileName, "_"), strlen("_"));
 		rename($files[$i], $newFileName);
+		$files[$i] = $newFileName;
 	    }
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
