@@ -47,7 +47,7 @@
                         $filen = str_replace($notAllowed, "_", $filen);
                         $filen = substr_replace($filen, ".", strrpos($filen, "_"), strlen("_"));
 
-                        $path = "./../pending/" . $filen;
+                        $path = "./../" . $filen;
 
                         if (move_uploaded_file($_FILES["item_file"]['tmp_name']["$j"], $path)) {
 
