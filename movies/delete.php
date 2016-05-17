@@ -37,6 +37,6 @@ try {
         echo 'Password did not match, your:' . $pass;
     }
 } catch (Exception $e) {
-    echo $e;
+    //echo $e;
 }
 

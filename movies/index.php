@@ -116,9 +116,9 @@
             if (strpos($files[$i], '.') > 1 && strpos($files[$i], '~') < 1) {
                 echo '<tr>';
                 if((strpos($files[$i], '.mp4') > 1 || strpos($files[$i], '.avi') > 1 || strpos($files[$i], '.mkv') > 1 || strpos($files[$i], '.3gp') > 1 ||  strpos($files[$i], '.mpg') > 1) && (isset($mdata->$files[$i]))){
-                	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/movie.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
+                	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/movie.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a style='pointer-events: none;cursor: default'>" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
                 }else if(isset($mdata->$files[$i])){
-                	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a >" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
+                	echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . $mdata->$files[$i]->genre . "</td><td style='max-width:150px;  font-size: 14;'>" . $mdata->$files[$i]->desc . "</td><td style='text-align:center;'><a style='pointer-events: none;cursor: default'>" . $mdata->$files[$i]->uploader . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
                 }else{
 			echo " <td style='max-width:325'><a id='" . substr($files[$i], 0, count($files[$i]) - 5) . "a' href='" . $files[$i] . "' download><img width='20' src='./../images/file.png'/> " . $files[$i] . "</a></td><td>" . formatSizeUnits(filesize($files[$i])) . "</td><td>" . "N_A" . "</td><td style='max-width:150px;  font-size: 14;'>" . "N_A" . "</td><td style='text-align:center;'><a >" . "System" . "</a></td><td>" . date("d F,Y", filemtime($files[$i])) . "</td>";
 		}	
@@ -138,6 +138,11 @@
         ?>
 
         <script type="text/javascript" src="./../assets/ml.js"></script>
+	<style>
+		.btn{
+			padding : 5px;
+		}
+	</style>
     </body>
 </html>
 <?php
